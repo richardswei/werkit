@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+# from rest_framework import routers
+from backend import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/notes/', views.NoteList.as_view(), name="notes"),
+    path('api/v1/notes/<int:pk>/', views.NoteDetails.as_view(), name="notes_details"),
+    path('api/v1/todoitems/', views.TodoItemList.as_view(), name="todo_items"),
+    path('api/v1/todoitems/<int:pk>/', views.TodoItemDetails.as_view(), name="todo_items_details"),
 ]
