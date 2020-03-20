@@ -125,4 +125,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # cors configuration to allow request from the vue application
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    # "https://example.com",
+    # "https://sub.example.com",
+    "http://localhost:8080",
+    # "http://127.0.0.1:9000"
+]
