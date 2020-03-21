@@ -15,16 +15,16 @@
             md="4"
           >
             <v-card class="elevation-12">
-              <v-card-header>
+              <v-card-text>
                 <h1 class="display-4">WerkIt</h1>
-              </v-card-header>
+              </v-card-text>
               <v-card-text>
                 <p class="display-1">WerkIt is a lightweight task management application</p>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn class="indigo lighten-1 white--text">Sign In</v-btn>
-                <v-btn class="indigo lighten-1 white--text">Get Started</v-btn>
+                <v-btn class="primary" to="/authentication">Sign In</v-btn>
+                <v-btn class="primary" to="/registration">Get Started</v-btn>
                 <v-spacer />
               </v-card-actions>
             </v-card>

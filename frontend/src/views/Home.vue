@@ -1,5 +1,5 @@
 <template>
-  <div class="home background">
+  <div>
     <HomeWelcome/>
   </div>
 </template>
@@ -15,12 +15,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.home.background {
-  background: url(../assets/background.png) no-repeat center center fixed;
-  background-size: cover;
-  height: 100%;
-  /*overflow: hidden;*/
-}
-</style>

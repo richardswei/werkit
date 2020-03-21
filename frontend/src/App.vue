@@ -3,10 +3,16 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/dashboard">Dashboard</router-link>
+      <router-link to="/dashboard">Dashboard</router-link> |
+      <router-link to="/authentication">Sign In</router-link> |
+      <router-link to="/registration">New Account</router-link>
     </div>
-    <router-view class="full-height"/>
+    <v-content>
+      <!-- <v-container> -->
+        <router-view class="background"/>
+      <!-- </v-container> -->
     <Footer/>
+    </v-content>
   </v-app>
 </template>
 
@@ -40,10 +46,12 @@ export default {
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: var(--v-primary-base);
 }
-.full-height {
-    height: 100%;
 
+.background {
+  background: url(./assets/background.png) no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
 }
 </style>
