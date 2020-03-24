@@ -1,56 +1,11 @@
+from . import serializers
+from . import models
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from rest_framework import generics
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from . import models
-from . import serializers
-# from rest_framework import permissions
-from backend.permissions import IsOwner
-from django.utils.decorators import method_decorator
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.authtoken.models import Token
-
-
-class NoteList(generics.ListCreateAPIView):
-    permission_classes = [IsOwner, IsAuthenticated]
-    queryset = models.Note.objects.all()
-    serializer_class = serializers.NoteSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class NoteDetails(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwner, IsAuthenticated]
-    queryset = models.Note.objects.all()
-    serializer_class = serializers.NoteSerializer
-
-
-class TodoItemList(generics.ListCreateAPIView):
-    permission_classes = [IsOwner, IsAuthenticated]
-    queryset = models.TodoItem.objects.all()
-    serializer_class = serializers.TodoItemSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class TodoItemDetails(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwner, IsAuthenticated]
-    queryset = models.TodoItem.objects.all()
-    serializer_class = serializers.TodoItemSerializer
-
-
-class UserList(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-    # permission_classes = [IsAdminUser, IsAuthenticated]
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-
-
-class UserDetail(generics.RetrieveAPIView):
-    permission_classes = [IsOwner, IsAuthenticated]
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
+from backend.permissions import IsOwner
 
 
 class Ping(generics.RetrieveAPIView):
@@ -98,6 +53,43 @@ class Signout(generics.DestroyAPIView):
         })
 
 
-# @login_required()
-# def secret_page(request, *args, **kwargs):
-#     return HttpResponse('Secret contents!', status=200)
+class NoteList(generics.ListCreateAPIView):
+    permission_classes = [IsOwner, IsAuthenticated]
+    queryset = models.Note.objects.all()
+    serializer_class = serializers.NoteSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class NoteDetails(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsOwner, IsAuthenticated]
+    queryset = models.Note.objects.all()
+    serializer_class = serializers.NoteSerializer
+
+
+class TodoItemList(generics.ListCreateAPIView):
+    permission_classes = [IsOwner, IsAuthenticated]
+    queryset = models.TodoItem.objects.all()
+    serializer_class = serializers.TodoItemSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class TodoItemDetails(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsOwner, IsAuthenticated]
+    queryset = models.TodoItem.objects.all()
+    serializer_class = serializers.TodoItemSerializer
+
+
+class UserList(generics.ListCreateAPIView):
+    permission_classes = [IsAdminUser, IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    permission_classes = [IsOwner, IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
