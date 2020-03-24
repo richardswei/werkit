@@ -3,7 +3,10 @@ from backend.utils import get_this_time_tomorrow
 from django.utils import timezone
 
 
+# Register your models here.
+
 # Create your models here.
+
 class TodoItem(models.Model):
     class Priority(models.IntegerChoices):
         NORMAL = 0

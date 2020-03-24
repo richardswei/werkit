@@ -14,19 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, re_path
 # from rest_framework import routers
+from rest_framework.authtoken import views as auth_views
 from backend import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/ping/', views.Ping.as_view(), name="ping"),
+    path('api/v1/registration/', views.Registration.as_view(), name="registration"),
+    path('api/v1/authentication/', views.Authentication.as_view(), name="authentication"),
     path('api/v1/notes/', views.NoteList.as_view(), name="notes"),
     path('api/v1/notes/<int:pk>/', views.NoteDetails.as_view(), name="notes_details"),
     path('api/v1/todoitems/', views.TodoItemList.as_view(), name="todo_items"),
     path('api/v1/todoitems/<int:pk>/', views.TodoItemDetails.as_view(), name="todo_items_details"),
-    path('api/v1/users/', views.UserList.as_view()),
-    path('api/v1/users/<int:pk>/', views.UserDetail.as_view()),
+    path('api/v1/users/', views.UserList.as_view(), name="user_list"),
+    path('api/v1/users/<int:pk>/', views.UserDetail.as_view(), name="user_profile"),
 ]
 urlpatterns += [
-    path('api-auth/', include('rest_framework.urls')),
+    re_path(r'^api-token-auth/', auth_views.obtain_auth_token)
 ]

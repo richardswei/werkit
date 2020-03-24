@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from backend.models import TodoItem, Note
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class TodoItemSerializer(serializers.ModelSerializer):
@@ -48,3 +49,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class LoginUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Unable to log in with provided credentials.")
