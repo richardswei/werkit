@@ -20,13 +20,6 @@ class NoteSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
 
 
-# class UserSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'todoitems', 'notes']
-
-
 class UserSerializer(serializers.ModelSerializer):
     notes = serializers.PrimaryKeyRelatedField(many=True, queryset=Note.objects.all())
     todoitems = serializers.PrimaryKeyRelatedField(many=True, queryset=TodoItem.objects.all())

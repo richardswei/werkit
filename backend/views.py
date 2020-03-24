@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -6,9 +5,7 @@ from . import models
 from . import serializers
 # from rest_framework import permissions
 from backend.permissions import IsOwner
-from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
 
