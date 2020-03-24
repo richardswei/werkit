@@ -21,16 +21,17 @@ from backend import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('api/v1/ping/', views.Ping.as_view(), name="ping"),
+    path('api/v1/auth-ping/', views.AuthPing.as_view(), name="auth_ping"),
     path('api/v1/registration/', views.Registration.as_view(), name="registration"),
-    path('api/v1/authentication/', views.Authentication.as_view(), name="authentication"),
+    path('api/v1/signin/', views.Signin.as_view(), name="signin"),
+    path('api/v1/signout/', views.Signout.as_view(), name="signout"),
+
+    path('api/v1/users/', views.UserList.as_view(), name="user_list"),
+    path('api/v1/users/<int:pk>/', views.UserDetail.as_view(), name="user_profile"),
     path('api/v1/notes/', views.NoteList.as_view(), name="notes"),
     path('api/v1/notes/<int:pk>/', views.NoteDetails.as_view(), name="notes_details"),
     path('api/v1/todoitems/', views.TodoItemList.as_view(), name="todo_items"),
     path('api/v1/todoitems/<int:pk>/', views.TodoItemDetails.as_view(), name="todo_items_details"),
-    path('api/v1/users/', views.UserList.as_view(), name="user_list"),
-    path('api/v1/users/<int:pk>/', views.UserDetail.as_view(), name="user_profile"),
-]
-urlpatterns += [
-    re_path(r'^api-token-auth/', auth_views.obtain_auth_token)
 ]
