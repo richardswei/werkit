@@ -60,12 +60,19 @@ class Ping(generics.RetrieveAPIView):
         return Response({'success': 'true'})
 
 
+class AuthPing(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({'authenticated': 'true'})
+
+
 class Registration(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = serializers.UserSerializer
 
 
-class Authentication(generics.GenericAPIView):
+class Signin(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = serializers.LoginUserSerializer
 
@@ -74,10 +81,20 @@ class Authentication(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         token = Token.objects.get_or_create(user=user)
-        print(token)
         return Response({
             "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token[0].key
+        })
+
+
+class Signout(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.LoginUserSerializer
+
+    def delete(self, request, *args, **kwargs):
+        request.auth.delete()
+        return Response({
+            "signed_out": "true"
         })
 
 
