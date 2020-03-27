@@ -1,6 +1,7 @@
 from django.db import models
 from backend.utils import get_this_time_tomorrow
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 
 # Create your models here.
@@ -20,7 +21,7 @@ class TodoItem(models.Model):
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True, default='')
     priority = models.IntegerField(choices=Priority.choices, default=0)
-    owner = models.ForeignKey('auth.User', related_name='todoitems', on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), related_name='todoitems', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.updated = timezone.now()
@@ -35,7 +36,7 @@ class Note(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=False, default='')
-    owner = models.ForeignKey('auth.User', related_name='notes', on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), related_name='notes', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.updated = timezone.now()
