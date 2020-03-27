@@ -21,17 +21,17 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+    component: () => import('../views/Dashboard.vue'),
   },
   {
     path: '/authentication',
     name: 'Sign In',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Authentication.vue'),
+    component: () => import('../views/Authentication.vue'),
   },
   {
     path: '/registration',
     name: 'New Account',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Registration.vue'),
+    component: () => import('../views/Registration.vue'),
   },
 ];
 

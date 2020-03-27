@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
@@ -114,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -136,8 +135,6 @@ STATIC_URL = '/static/'
 
 # cors configuration to allow request from the vue application
 CORS_ORIGIN_WHITELIST = [
-    # "https://example.com",
-    # "https://sub.example.com",
     "http://localhost:8080",
     # "http://127.0.0.1:9000"
 ]

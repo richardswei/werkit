@@ -10,7 +10,7 @@
         <v-col
           cols="12"
           sm="8"
-          md="4"
+          lg="4"
         >
           <v-card class="elevation-12">
             <v-toolbar
