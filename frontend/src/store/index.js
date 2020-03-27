@@ -12,7 +12,7 @@ export default new Vuex.Store({
     INCREMENT(state) {
       state.count += 1;
     },
-    SET_TOKEN(state, { token }) {
+    SET_TOKEN(state, token) {
       state.token = token;
     },
     UNSET_TOKEN(state) {
@@ -21,7 +21,6 @@ export default new Vuex.Store({
   },
   actions: {
     signin({ commit }, account) {
-      console.log(account);
       commit('SET_TOKEN', account);
     },
     signout({ commit }) {
