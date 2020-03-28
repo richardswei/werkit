@@ -55,7 +55,7 @@
             <v-card-actions>
               <v-btn class="link" to="/authentication">Already have an account?</v-btn>
               <v-spacer />
-              <v-btn type="submit">Register</v-btn>
+              <v-btn type="submit" color=primary>Register</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>

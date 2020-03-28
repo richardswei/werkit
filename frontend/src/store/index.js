@@ -7,6 +7,11 @@ export default new Vuex.Store({
   state: {
     count: 0,
     token: null,
+    drawer: false,
+    // profile: null,
+  },
+  getters: {
+    drawerState: (state) => state.drawer,
   },
   mutations: {
     INCREMENT(state) {
@@ -18,6 +23,9 @@ export default new Vuex.Store({
     UNSET_TOKEN(state) {
       state.token = null;
     },
+    TOGGLE_DRAWER(state) {
+      state.drawer = !state.drawer;
+    },
   },
   actions: {
     signin({ commit }, account) {
@@ -25,6 +33,9 @@ export default new Vuex.Store({
     },
     signout({ commit }) {
       commit('UNSET_TOKEN');
+    },
+    togglemenu({ commit }) {
+      commit('TOGGLE_DRAWER');
     },
   },
   modules: {

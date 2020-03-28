@@ -1,8 +1,18 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
+
+function guard(to, from, next) {
+  if (store.state.token) {
+    // or however you store your logged in state
+    next(); // allow to enter route
+  } else {
+    next('/signin'); // go to '/signin';
+  }
+}
 
 const routes = [
   {
@@ -20,11 +30,12 @@ const routes = [
   },
   {
     path: '/dashboard',
+    beforeEnter: guard,
     name: 'Dashboard',
     component: () => import('../views/Dashboard.vue'),
   },
   {
-    path: '/authentication',
+    path: '/signin',
     name: 'Sign In',
     component: () => import('../views/Authentication.vue'),
   },

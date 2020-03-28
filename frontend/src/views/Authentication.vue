@@ -30,7 +30,7 @@
               <v-card-actions>
                 <v-btn @click="showToken">Token</v-btn>
 
-                <v-btn class="link" to="/registration">Don't have an acccount?</v-btn>
+                <v-btn class="link" to="/registration">Don't have an account?</v-btn>
                 <v-spacer />
                 <v-btn type="submit" color="primary">Login</v-btn>
               </v-card-actions>
