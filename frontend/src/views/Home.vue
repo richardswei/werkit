@@ -3,16 +3,16 @@
     class="fill-height"
     fluid
   >
-  <v-row
-    align="center"
-    justify="center"
-  >
-    <v-col
-      cols="12"
-      sm="8"
-      lg="4"
+    <v-row
+      align="center"
+      justify="center"
     >
-    <HomeWelcome/>
+      <v-col
+        cols="12"
+        sm="8"
+        lg="4"
+      >
+        <HomeWelcome/>
       </v-col>
     </v-row>
   </v-container>

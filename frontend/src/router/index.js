@@ -44,6 +44,11 @@ const routes = [
     name: 'New Account',
     component: () => import('../views/Registration.vue'),
   },
+  {
+    path: '/404',
+    component: () => import('../views/NotFound.vue'),
+  },
+  { path: '*', redirect: '/404' },
 ];
 
 const router = new VueRouter({

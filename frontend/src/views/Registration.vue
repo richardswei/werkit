@@ -53,7 +53,7 @@
               />
             </v-card-text>
             <v-card-actions>
-              <v-btn class="link" to="/authentication">Already have an account?</v-btn>
+              <v-btn class="link" to="/signin">Already have an account?</v-btn>
               <v-spacer />
               <v-btn type="submit" color=primary>Register</v-btn>
             </v-card-actions>
@@ -79,7 +79,7 @@ export default {
   methods: {
     postRegistration(event) {
       event.preventDefault();
-      axios.post('http://localhost:8000/api/v1/registration/', {
+      axios.post('http://localhost:8000/api/v1/signin/', {
         username: this.username,
         first_name: this.firstname,
         last_name: this.lastname,
