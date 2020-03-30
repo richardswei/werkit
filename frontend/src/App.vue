@@ -8,10 +8,20 @@
       <router-link to="/registration">New Account</router-link>
     </div> -->
     <v-content>
+      <v-app-bar>
+        <v-spacer/>
+        <v-btn
+          color="pink"
+          dark
+          @click="itemClick"
+        >
+          Toggle
+        </v-btn>
+      </v-app-bar>
       <!-- <v-container> -->
-        <router-view class="background"/>
+      <router-view class="background"/>
       <!-- </v-container> -->
-    <Footer/>
+      <Footer/>
     </v-content>
   </v-app>
 </template>
@@ -23,6 +33,11 @@ export default {
   name: 'Home',
   components: {
     Footer,
+  },
+  methods: {
+    itemClick() {
+      this.$store.dispatch('togglemenu');
+    },
   },
 };
 </script>

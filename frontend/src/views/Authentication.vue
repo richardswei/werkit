@@ -28,8 +28,6 @@
                 />
             </v-card-text>
             <v-card-actions>
-              <v-btn @click="showToken">Token</v-btn>
-
               <v-btn class="link" to="/registration">Don't have an account?</v-btn>
               <v-spacer />
               <v-btn type="submit" color="primary">Login</v-btn>
@@ -50,9 +48,6 @@ export default {
     password: '',
   }),
   methods: {
-    showToken() {
-      console.log(this.$store.state.token);
-    },
     postAuth(event) {
       event.preventDefault();
       axios.post('http://localhost:8000/api/v1/signin/', {

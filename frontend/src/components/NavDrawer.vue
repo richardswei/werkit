@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="drawerState"
+    right
     absolute
   >
     <v-list-item>
@@ -9,8 +10,18 @@
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>First_Name Last_Name</v-list-item-title>
-      </v-list-item-content>
+          <v-list-item-title class="title">
+            {{username}}
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{firstname}}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+    </v-list-item>
+    <v-list-item
+      @click="deleteAuth"
+    >
+      Sign Out
     </v-list-item>
 
     <v-divider></v-divider>
@@ -34,6 +45,8 @@
   </v-navigation-drawer>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   // beforeCreate() {
   //   console.log('Nothing gets called before me!')
@@ -52,6 +65,24 @@ export default {
       set() {
         // this.$store.commit('TOGGLE_DRAWER');
       },
+    },
+    username: () => 'username',
+    firstname: () => 'first_name',
+  },
+  methods: {
+    deleteAuth(event) {
+      event.preventDefault();
+      axios.delete('http://localhost:8000/api/v1/signout/', {
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
+      })
+        .then((response) => {
+          this.$store.dispatch('signin', response.data.token);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };

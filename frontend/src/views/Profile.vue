@@ -21,5 +21,10 @@ export default {
   components: {
     NavDrawer,
   },
+  methods: {
+    itemClick() {
+      this.$store.dispatch('togglemenu');
+    },
+  },
 };
 </script>
