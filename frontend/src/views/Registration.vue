@@ -37,7 +37,6 @@
               />
               <v-text-field
                 id="password"
-                autocomplete="new-password"
                 label="Password"
                 v-model="password"
                 prepend-icon="lock"
@@ -45,9 +44,8 @@
               />
               <v-text-field
                 id="password-verification"
-                autocomplete="new-password"
                 label="Confirm Password"
-                v-model="password"
+                v-model="confirmation"
                 prepend-icon="lock"
                 type="password"
               />
@@ -75,11 +73,12 @@ export default {
     lastname: '',
     email: '',
     password: '',
+    confirmation: '',
   }),
   methods: {
     postRegistration(event) {
       event.preventDefault();
-      axios.post('http://localhost:8000/api/v1/signin/', {
+      axios.post('http://localhost:8000/api/v1/registration/', {
         username: this.username,
         first_name: this.firstname,
         last_name: this.lastname,
