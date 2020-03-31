@@ -25,6 +25,7 @@ export default new Vuex.Store({
   },
   getters: {
     drawerState: (state) => state.drawer,
+    loggedIn: (state) => state.token,
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -36,6 +37,9 @@ export default new Vuex.Store({
     TOGGLE_DRAWER(state) {
       state.drawer = !state.drawer;
     },
+    CLOSE_DRAWER(state) {
+      state.drawer = false;
+    },
   },
   actions: {
     signin({ commit }, account) {
@@ -46,6 +50,9 @@ export default new Vuex.Store({
     },
     togglemenu({ commit }) {
       commit('TOGGLE_DRAWER');
+    },
+    close_menu({ commit }) {
+      commit('CLOSE_DRAWER');
     },
   },
   modules: {

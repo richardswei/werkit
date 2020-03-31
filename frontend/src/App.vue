@@ -7,32 +7,40 @@
       <router-link to="/authentication">Sign In</router-link> |
       <router-link to="/registration">New Account</router-link>
     </div> -->
+    <v-app-bar
+      app
+      class="primary"
+    >
+      <div class="text-white display-3">Werkit</div>
+      <v-spacer/>
+      <v-btn
+        v-if="this.$store.state.token"
+        color="pink"
+        dark
+        @click="itemClick"
+      >
+        Menu
+      </v-btn>
+    </v-app-bar>
     <v-content>
-      <v-app-bar>
-        <v-spacer/>
-        <v-btn
-          color="pink"
-          dark
-          @click="itemClick"
-        >
-          Toggle
-        </v-btn>
-      </v-app-bar>
       <!-- <v-container> -->
       <router-view class="background"/>
       <!-- </v-container> -->
-      <Footer/>
+      <NavDrawer/>
     </v-content>
+    <Footer/>
   </v-app>
 </template>
 
 <script>
 import Footer from '@/components/Footer.vue';
+import NavDrawer from '@/components/NavDrawer.vue';
 
 export default {
   name: 'Home',
   components: {
     Footer,
+    NavDrawer,
   },
   methods: {
     itemClick() {
@@ -69,4 +77,9 @@ export default {
   background-size: cover;
   height: 100%;
 }
+
+.text-white {
+  color: white
+}
+
 </style>

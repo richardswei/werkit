@@ -53,8 +53,9 @@ export default {
   // },
   data: () => ({
     items: [
-      { title: 'Home', icon: 'dashboard', link: '/' },
-      { title: 'About', icon: 'question_answer', link: '/' },
+      { title: 'Profile', icon: 'person', link: '/app/profile' },
+      { title: 'Dashboard', icon: 'dashboard', link: '/app/dashboard' },
+      { title: 'Notes', icon: 'notes', link: '/app/notes' },
     ],
   }),
   computed: {
@@ -80,6 +81,7 @@ export default {
         .then((response) => {
           this.$store.dispatch('signin', response.data.token);
         })
+        .then(() => window.location.replace('/'))
         .catch((e) => {
           console.log(e);
         });

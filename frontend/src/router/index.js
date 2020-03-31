@@ -37,19 +37,24 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
-  { path: '/app', redirect: '/app/dashboard' },
   {
-    path: '/app/dashboard',
+    path: '/app',
+    name: 'MainApp',
     beforeEnter: guard,
-    name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue'),
-  },
-  {
-    path: '/app/profile',
-    beforeEnter: guard,
-    name: 'Profile',
-    component: () => import('../views/Profile.vue'),
+    component: () => import('../views/EmptyRouterView.vue'),
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('../views/Dashboard.vue'),
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('../views/Profile.vue'),
 
+      },
+    ],
   },
   {
     path: '/signin',

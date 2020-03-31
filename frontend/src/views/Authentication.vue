@@ -57,6 +57,7 @@ export default {
         .then((response) => {
           this.$store.dispatch('signin', response.data.token);
         })
+        .then(() => this.$router.push({ path: 'app/dashboard' }))
         .catch((e) => {
           console.log(e);
         });

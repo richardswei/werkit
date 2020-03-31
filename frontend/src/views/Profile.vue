@@ -1,5 +1,5 @@
 <template>
-  <v-sheet
+  <div
     class="overflow-hidden"
     style="position: relative;"
   >
@@ -10,21 +10,10 @@
       >
       </v-row>
     </v-container>
-    <NavDrawer/>
-  </v-sheet>
+  </div>
 </template>
 <script>
-import NavDrawer from '@/components/NavDrawer.vue';
-
 export default {
-  name: 'Dashboard',
-  components: {
-    NavDrawer,
-  },
-  methods: {
-    itemClick() {
-      this.$store.dispatch('togglemenu');
-    },
-  },
+  name: 'Profile',
 };
 </script>
