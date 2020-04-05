@@ -22,7 +22,7 @@
         v-if="this.$store.state.token"
         color="teal"
         dark
-        @click="itemClick"
+        @click="toggleMenu"
       >
           <v-icon>menu</v-icon>
       </v-btn>
@@ -43,7 +43,7 @@ export default {
     NavDrawer,
   },
   methods: {
-    itemClick() {
+    toggleMenu() {
       this.$store.dispatch('togglemenu');
     },
   },

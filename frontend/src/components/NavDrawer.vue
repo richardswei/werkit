@@ -3,6 +3,7 @@
     v-model="drawerState"
     right
     absolute
+    stateless
   >
     <v-list-item>
       <v-list-item-avatar>
