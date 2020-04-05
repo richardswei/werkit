@@ -12,10 +12,10 @@
 
       <v-list-item-content>
           <v-list-item-title class="title">
-            {{username}}
+            {{user.username}}
           </v-list-item-title>
           <v-list-item-subtitle>
-            {{firstname}}
+            {{user.first_name}}
           </v-list-item-subtitle>
         </v-list-item-content>
     </v-list-item>
@@ -73,8 +73,14 @@ export default {
         // this.$store.commit('TOGGLE_DRAWER');
       },
     },
-    username: () => 'username',
-    firstname: () => 'first_name',
+    user: {
+      get() {
+        return this.$store.getters.user;
+      },
+      set() {
+
+      },
+    },
   },
   methods: {
     deleteAuth(event) {

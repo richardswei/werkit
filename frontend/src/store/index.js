@@ -21,10 +21,16 @@ export default new Vuex.Store({
   state: {
     token: null,
     drawer: false,
+    user: {
+      username: 'Username',
+      first_name: 'First Name',
+      last_name: 'Last Name',
+    },
   },
   getters: {
     drawerState: (state) => state.drawer,
     loggedIn: (state) => state.token,
+    user: (state) => state.user,
   },
   mutations: {
     SET_TOKEN(state, token) {
