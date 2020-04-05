@@ -85,7 +85,6 @@ export default {
   methods: {
     deleteAuth(event) {
       event.preventDefault();
-      console.log(this.$store.state.token);
       axios.delete('http://localhost:8000/api/v1/signout/', {
         headers: {
           Authorization: `Token ${this.$store.state.token}`,
