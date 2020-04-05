@@ -10,7 +10,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn class="primary" to="/authentication">Sign In</v-btn>
+          <v-btn class="primary" to="/signin">Sign In</v-btn>
           <v-btn class="primary" to="/registration">Get Started</v-btn>
           <v-spacer />
         </v-card-actions>
@@ -21,8 +21,12 @@
 
 <script>
 
+export default {
+  name: 'Welcome',
+  components: {
+  },
+};
 </script>
 
 <style>
-
 </style>

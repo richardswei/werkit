@@ -1,12 +1,31 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
+
+function guard(to, from, next) {
+  if (store.state.token) {
+    // or however you store your logged in state
+    next(); // allow to enter route
+  } else {
+    next('/signin'); // go to '/signin';
+  }
+}
+
+function alreadyLoggedIn(to, from, next) {
+  if (store.state.token) {
+    next('/app/dashboard');
+  } else {
+    next();
+  }
+}
 
 const routes = [
   {
     path: '/',
+    beforeEnter: alreadyLoggedIn,
     name: 'Home',
     component: Home,
   },
@@ -19,20 +38,41 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue'),
+    path: '/app',
+    name: 'MainApp',
+    beforeEnter: guard,
+    component: () => import('../views/EmptyRouterView.vue'),
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('../views/Dashboard.vue'),
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('../views/Profile.vue'),
+
+      },
+    ],
   },
   {
-    path: '/authentication',
+    path: '/signin',
     name: 'Sign In',
+    beforeEnter: alreadyLoggedIn,
     component: () => import('../views/Authentication.vue'),
   },
   {
     path: '/registration',
     name: 'New Account',
+    beforeEnter: alreadyLoggedIn,
     component: () => import('../views/Registration.vue'),
   },
+  {
+    path: '/404',
+    component: () => import('../views/NotFound.vue'),
+  },
+  { path: '*', redirect: '/404' },
 ];
 
 const router = new VueRouter({

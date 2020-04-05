@@ -12,21 +12,25 @@
               <v-text-field
                 label="Username"
                 v-model="username"
+                autocomplete="username"
                 prepend-icon="person"
                 type="text"
               />
               <v-text-field
                 label="First Name"
+                autocomplete="given-name"
                 v-model="firstname"
                 type="text"
               />
               <v-text-field
                 label="Last Name"
+                autocomplete="family-name"
                 v-model="lastname"
                 type="text"
               />
               <v-text-field
                 label="Email"
+                autocomplete="email"
                 v-model="email"
                 prepend-icon="mail"
                 type="text"
@@ -41,16 +45,15 @@
               <v-text-field
                 id="password-verification"
                 label="Confirm Password"
-                v-model="password"
+                v-model="confirmation"
                 prepend-icon="lock"
                 type="password"
               />
             </v-card-text>
             <v-card-actions>
-              <v-btn @click='increment'>increment</v-btn>
-              <v-btn class="link" to="/authentication">Already have an account?</v-btn>
+              <v-btn class="link" to="/signin">Already have an account?</v-btn>
               <v-spacer />
-              <v-btn type="submit">Register</v-btn>
+              <v-btn type="submit" color=primary>Register</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>
@@ -64,46 +67,25 @@ import axios from 'axios';
 
 export default {
   name: 'Registration',
-  components: {
-  },
-  computed: {
-    count() {
-      return this.$store.state.count;
-    },
-  },
   data: () => ({
     username: '',
     firstname: '',
     lastname: '',
     email: '',
     password: '',
+    confirmation: '',
   }),
   methods: {
-    increment() {
-      console.log('starting increment');
-      this.$store.commit('INCREMENT');
-    },
     postRegistration(event) {
       event.preventDefault();
-      const account = {
-        username: this.username,
-        first_name: this.firstname,
-        last_name: this.lastname,
-        email: this.email,
-        password: this.password,
-        todoitems: [],
-        notes: [],
-      };
-      console.log(account);
       axios.post('http://localhost:8000/api/v1/registration/', {
         username: this.username,
         first_name: this.firstname,
         last_name: this.lastname,
         email: this.email,
         password: this.password,
-        todoitems: [],
-        notes: [],
       })
+        .then(() => window.location.replace('/signin'))
         .then((response) => {
           console.log(response);
         })
