@@ -21,7 +21,6 @@ export default new Vuex.Store({
   state: {
     token: null,
     drawer: false,
-    // profile: null,
   },
   getters: {
     drawerState: (state) => state.drawer,

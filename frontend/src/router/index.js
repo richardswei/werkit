@@ -59,11 +59,13 @@ const routes = [
   {
     path: '/signin',
     name: 'Sign In',
+    beforeEnter: alreadyLoggedIn,
     component: () => import('../views/Authentication.vue'),
   },
   {
     path: '/registration',
     name: 'New Account',
+    beforeEnter: alreadyLoggedIn,
     component: () => import('../views/Registration.vue'),
   },
   {

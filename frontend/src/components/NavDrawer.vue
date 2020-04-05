@@ -20,8 +20,12 @@
     </v-list-item>
     <v-list-item
       @click="deleteAuth"
+      dark
+      class="teal"
     >
       Sign Out
+      <v-spacer></v-spacer>
+      <v-icon>exit_to_app</v-icon>
     </v-list-item>
 
     <v-divider></v-divider>
@@ -44,6 +48,7 @@
     </v-list>
   </v-navigation-drawer>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -73,19 +78,26 @@ export default {
   methods: {
     deleteAuth(event) {
       event.preventDefault();
+      console.log(this.$store.state.token);
       axios.delete('http://localhost:8000/api/v1/signout/', {
         headers: {
           Authorization: `Token ${this.$store.state.token}`,
         },
       })
-        .then((response) => {
-          this.$store.dispatch('signin', response.data.token);
+        .then(() => {
+          this.$store.dispatch('signout');
         })
         .then(() => window.location.replace('/'))
         .catch((e) => {
+          this.$store.dispatch('signout');
           console.log(e);
         });
     },
   },
 };
 </script>
+<style>
+  .flipped {
+    transform: rotateY(180deg);
+  }
+</style>

@@ -1,6 +1,14 @@
 <template>
   <div>
     <router-view></router-view>
-    <NavDrawer/>
   </div>
 </template>
+<script>
+export default {
+  name: 'EmptyView',
+  components: {
+  },
+};
+</script>
+<style>
+</style>

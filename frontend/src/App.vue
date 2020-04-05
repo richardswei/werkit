@@ -11,35 +11,35 @@
       app
       class="primary"
     >
-      <div class="text-white display-3">Werkit</div>
+      <router-link to="/">
+        <img
+          src="@/assets/logos/vector/default-monochrome-white.svg"
+          alt="Logo"
+          height="40"/>
+      </router-link>
       <v-spacer/>
       <v-btn
         v-if="this.$store.state.token"
-        color="pink"
+        color="teal"
         dark
         @click="itemClick"
       >
-        Menu
+          <v-icon>menu</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
-      <!-- <v-container> -->
-      <router-view class="background"/>
-      <!-- </v-container> -->
+      <router-view class="pt-12 pb-12 background"/>
       <NavDrawer/>
     </v-content>
-    <Footer/>
   </v-app>
 </template>
 
 <script>
-import Footer from '@/components/Footer.vue';
 import NavDrawer from '@/components/NavDrawer.vue';
 
 export default {
   name: 'Home',
   components: {
-    Footer,
     NavDrawer,
   },
   methods: {

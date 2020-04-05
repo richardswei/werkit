@@ -85,6 +85,7 @@ export default {
         email: this.email,
         password: this.password,
       })
+        .then(() => window.location.replace('/signin'))
         .then((response) => {
           console.log(response);
         })
