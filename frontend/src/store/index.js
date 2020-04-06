@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersist from 'vuex-persist';
+// import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ const vuexLocalStorage = new VuexPersist({
   // reducer: state => state,
   reducer: (state) => ({
     token: state.token,
+    user: state.user,
   }),
   // Function that passes a mutation and
   // lets you decide if it should update the state in localStorage.
@@ -25,16 +27,20 @@ export default new Vuex.Store({
       username: 'Username',
       first_name: 'First Name',
       last_name: 'Last Name',
+      email: 'user@email.com',
     },
   },
   getters: {
     drawerState: (state) => state.drawer,
-    loggedIn: (state) => state.token,
+    token: (state) => state.token,
     user: (state) => state.user,
   },
   mutations: {
     SET_TOKEN(state, token) {
       state.token = token;
+    },
+    SET_USER(state, user) {
+      state.user = user;
     },
     UNSET_TOKEN(state) {
       state.token = null;
@@ -47,8 +53,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    signin({ commit }, account) {
-      commit('SET_TOKEN', account);
+    setsession({ commit }, authPayload) {
+      commit('SET_TOKEN', authPayload.token);
+      commit('SET_USER', authPayload.user);
     },
     signout({ commit }) {
       commit('UNSET_TOKEN');

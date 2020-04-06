@@ -55,7 +55,7 @@ export default {
         password: this.password,
       })
         .then((response) => {
-          this.$store.dispatch('signin', response.data.token);
+          this.$store.dispatch('setsession', response.data);
         })
         .then(() => this.$router.push({ path: 'app/dashboard' }))
         .catch((e) => {
