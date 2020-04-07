@@ -1,0 +1,54 @@
+[{
+  "model": "contenttypes.contenttype", "pk": 10, "fields": {"app_label": "admin", 
+  "model": "logentry"}}, {"model": "contenttypes.contenttype", "pk": 11, "fields": {"app_label": "auth", 
+  "model": "permission"}}, {"model": "contenttypes.contenttype", "pk": 12, "fields": {"app_label": "auth", 
+  "model": "group"}}, {"model": "contenttypes.contenttype", "pk": 13, "fields": {"app_label": "auth", 
+  "model": "user"}}, {"model": "contenttypes.contenttype", "pk": 14, "fields": {"app_label": "contenttypes", 
+  "model": "contenttype"}}, {"model": "contenttypes.contenttype", "pk": 15, "fields": {"app_label": "sessions", 
+  "model": "session"}}, {"model": "contenttypes.contenttype", "pk": 16, "fields": {"app_label": "backend", 
+  "model": "todoitem"}}, {"model": "contenttypes.contenttype", "pk": 17, "fields": {"app_label": "backend", 
+  "model": "note"}}, {"model": "contenttypes.contenttype", "pk": 18, "fields": {"app_label": "authtoken", "model": "token"}}, {
+  "model": "auth.permission", "pk": 37, "fields": {"name": "Can add log entry", "content_type": 10, "codename": "add_logentry"}}, {
+  "model": "auth.permission", "pk": 38, "fields": {"name": "Can change log entry", "content_type": 10, "codename": "change_logentry"}}, {
+  "model": "auth.permission", "pk": 39, "fields": {"name": "Can delete log entry", "content_type": 10, "codename": "delete_logentry"}}, {
+  "model": "auth.permission", "pk": 40, "fields": {"name": "Can view log entry", "content_type": 10, "codename": "view_logentry"}}, {
+  "model": "auth.permission", "pk": 41, "fields": {"name": "Can add permission", "content_type": 11, "codename": "add_permission"}}, {
+  "model": "auth.permission", "pk": 42, "fields": {"name": "Can change permission", "content_type": 11, "codename": "change_permission"}}, {
+  "model": "auth.permission", "pk": 43, "fields": {"name": "Can delete permission", "content_type": 11, "codename": "delete_permission"}}, {
+  "model": "auth.permission", "pk": 44, "fields": {"name": "Can view permission", "content_type": 11, "codename": "view_permission"}}, {
+  "model": "auth.permission", "pk": 45, "fields": {"name": "Can add group", "content_type": 12, "codename": "add_group"}}, {
+  "model": "auth.permission", "pk": 46, "fields": {"name": "Can change group", "content_type": 12, "codename": "change_group"}}, {
+  "model": "auth.permission", "pk": 47, "fields": {"name": "Can delete group", "content_type": 12, "codename": "delete_group"}}, {
+  "model": "auth.permission", "pk": 48, "fields": {"name": "Can view group", "content_type": 12, "codename": "view_group"}}, {
+  "model": "auth.permission", "pk": 49, "fields": {"name": "Can add user", "content_type": 13, "codename": "add_user"}}, {
+  "model": "auth.permission", "pk": 50, "fields": {"name": "Can change user", "content_type": 13, "codename": "change_user"}}, {
+  "model": "auth.permission", "pk": 51, "fields": {"name": "Can delete user", "content_type": 13, "codename": "delete_user"}}, {
+  "model": "auth.permission", "pk": 52, "fields": {"name": "Can view user", "content_type": 13, "codename": "view_user"}}, {
+  "model": "auth.permission", "pk": 53, "fields": {"name": "Can add content type", "content_type": 14, "codename": "add_contenttype"}}, {
+  "model": "auth.permission", "pk": 54, "fields": {"name": "Can change content type", "content_type": 14, "codename": "change_contenttype"}}, {
+  "model": "auth.permission", "pk": 55, "fields": {"name": "Can delete content type", "content_type": 14, "codename": "delete_contenttype"}}, {
+  "model": "auth.permission", "pk": 56, "fields": {"name": "Can view content type", "content_type": 14, "codename": "view_contenttype"}}, {
+  "model": "auth.permission", "pk": 57, "fields": {"name": "Can add session", "content_type": 15, "codename": "add_session"}}, {
+  "model": "auth.permission", "pk": 58, "fields": {"name": "Can change session", "content_type": 15, "codename": "change_session"}}, {
+  "model": "auth.permission", "pk": 59, "fields": {"name": "Can delete session", "content_type": 15, "codename": "delete_session"}}, {
+  "model": "auth.permission", "pk": 60, "fields": {"name": "Can view session", "content_type": 15, "codename": "view_session"}}, {
+  "model": "auth.permission", "pk": 61, "fields": {"name": "Can add todo item", "content_type": 16, "codename": "add_todoitem"}}, {
+  "model": "auth.permission", "pk": 62, "fields": {"name": "Can change todo item", "content_type": 16, "codename": "change_todoitem"}}, {
+  "model": "auth.permission", "pk": 63, "fields": {"name": "Can delete todo item", "content_type": 16, "codename": "delete_todoitem"}}, {
+  "model": "auth.permission", "pk": 64, "fields": {"name": "Can view todo item", "content_type": 16, "codename": "view_todoitem"}}, {
+  "model": "auth.permission", "pk": 65, "fields": {"name": "Can add note", "content_type": 17, "codename": "add_note"}}, {
+  "model": "auth.permission", "pk": 66, "fields": {"name": "Can change note", "content_type": 17, "codename": "change_note"}}, {
+  "model": "auth.permission", "pk": 67, "fields": {"name": "Can delete note", "content_type": 17, "codename": "delete_note"}}, {
+  "model": "auth.permission", "pk": 68, "fields": {"name": "Can view note", "content_type": 17, "codename": "view_note"}}, {
+  "model": "auth.permission", "pk": 69, "fields": {"name": "Can add Token", "content_type": 18, "codename": "add_token"}}, {
+  "model": "auth.permission", "pk": 70, "fields": {"name": "Can change Token", "content_type": 18, "codename": "change_token"}}, {
+  "model": "auth.permission", "pk": 71, "fields": {"name": "Can delete Token", "content_type": 18, "codename": "delete_token"}}, {
+  "model": "auth.permission", "pk": 72, "fields": {"name": "Can view Token", "content_type": 18, "codename": "view_token"}}, {
+  "model": "auth.user", "pk": 20, "fields": {"password": "pbkdf2_sha256$180000$B6lysVzcos02$kPk9iwtfQzE9Qc7+2yHYM0jyIFctZ0/BBx9QGyKdUwE=", "last_login": null, "is_superuser": false, "username": "test", "first_name": "testing", "last_name": "user", "email": "testing@gmail.com", "is_staff": false, "is_active": true, "date_joined": "2020-04-07T03:54:59.990Z", "groups": [], "user_permissions": []}}, {
+  "model": "auth.user", "pk": 21, "fields": {"password": "pbkdf2_sha256$180000$1T5To8uZxEey$ajU86jRtEi4frtNGGmOHV91r/zw3Xd9kElk5nCGyqu4=", "last_login": null, "is_superuser": false, "username": "popo", "first_name": "popo", "last_name": "popo", "email": "police@popo.com", "is_staff": false, "is_active": true, "date_joined": "2020-04-07T18:22:49.831Z", "groups": [], "user_permissions": []}}, {
+  "model": "backend.todoitem", "pk": 1, "fields": {"created": "2020-04-07T18:48:07.019Z", "updated": "2020-04-07T18:48:07.019Z", "due": "2020-04-08T18:48:07.019Z", "title": "title", "description": "description", "priority": 0, "owner": 21}}, {
+  "model": "backend.todoitem", "pk": 2, "fields": {"created": "2020-04-07T18:48:11.022Z", "updated": "2020-04-07T18:48:11.022Z", "due": "2020-04-08T18:48:11.022Z", "title": "title", "description": "description", "priority": 0, "owner": 21}}, {
+  "model": "backend.note", "pk": 1, "fields": {"created": "2020-04-07T18:44:27.769Z", "updated": "2020-04-07T18:44:27.769Z", "title": "title", "description": "description", "owner": 21}}, {
+  "model": "backend.note", "pk": 2, "fields": {"created": "2020-04-07T18:44:39.415Z", "updated": "2020-04-07T18:44:39.415Z", "title": "title", "description": "description", "owner": 21}}, {
+  "model": "backend.note", "pk": 3, "fields": {"created": "2020-04-07T18:44:43.124Z", "updated": "2020-04-07T18:44:43.124Z", "title": "title", "description": "description", "owner": 21}}, {
+  "model": "authtoken.token", "pk": "df2cb5711aecb30ae41f7f7d4c87b7672f841436", "fields": {"user": 21, "created": "2020-04-07T18:23:56.090Z"}}]

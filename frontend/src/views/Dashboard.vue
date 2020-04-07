@@ -17,8 +17,8 @@ import axios from 'axios';
 
 export default {
   name: 'Dashboard',
-  beforeCreate() {
-    this.$store.dispatch('set_todos');
+  created() {
+    this.getTodos();
   },
   methods: {
     getTodos() {

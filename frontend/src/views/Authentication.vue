@@ -55,6 +55,7 @@ export default {
         password: this.password,
       })
         .then((response) => {
+          console.log(response.data);
           this.$store.dispatch('setsession', response.data);
         })
         .then(() => this.$router.push({ path: 'app/dashboard' }))
