@@ -61,6 +61,14 @@ class NoteList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return models.Note.objects.filter(owner=user)
+
 
 class NoteDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwner, IsAuthenticated]
@@ -75,6 +83,14 @@ class TodoItemList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return models.TodoItem.objects.filter(owner=user)
 
 
 class TodoItemDetails(generics.RetrieveUpdateDestroyAPIView):
