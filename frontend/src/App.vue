@@ -24,7 +24,7 @@
         dark
         @click="toggleMenu"
       >
-          <v-icon>menu</v-icon>
+        <v-icon>menu</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
