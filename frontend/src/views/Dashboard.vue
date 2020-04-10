@@ -14,7 +14,7 @@
               <v-fade-transition leave-absolute>
                 <v-row no-gutters>
                   <v-col
-                    cols="2"
+                    cols="3"
                     class="text--secondary"
                   >
                     <span
@@ -31,7 +31,7 @@
                     </span>
                   </v-col>
                   <v-col
-                    cols="9"
+                    cols="8"
                     class="text--secondary"
                   >
                     <span
@@ -43,11 +43,16 @@
                       v-else
                       key="1"
                     >
-                      <v-header><strong>{{item.title}}</strong> - {{item.description}}</v-header>
+                      <div text-truncate>
+                        <strong>{{item.title}}</strong> - {{item.description}}
+                      </div>
                     </span>
                   </v-col>
                   <v-col cols="1" >
-                    <v-chip small>
+                    <v-chip
+                      x-small
+                      :color="getPriorityColor(item.priority)"
+                    >
                       {{item.priority}}
                     </v-chip>
                   </v-col>
@@ -65,29 +70,6 @@
               filled
               dense
             ></v-text-field>
-            <v-select
-              v-model="item.priority"
-              :items="priorities"
-              label="Priority"
-              filled
-              dense
-              chips
-              flat
-            ></v-select>
-            <v-btn-toggle
-              v-model="item.priority"
-              mandatory
-              dense
-            >
-              <v-btn
-                v-for="choice in color"
-                :key="choice"
-                :value="choice"
-                :color="choice"
-              >
-                <v-text>{{choice}}</v-text>
-              </v-btn>
-            </v-btn-toggle>
             <v-menu
               v-model="menu2"
               :close-on-content-click="false"
@@ -99,7 +81,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="date"
-                  label="Picker without buttons"
+                  label="Due Date"
                   prepend-icon="event"
                   readonly
                   v-on="on"
@@ -115,7 +97,27 @@
               auto-grow
               rows="3"
             ></v-textarea>
-            <div>Last modified: {{item.updated}}</div>
+            <p>
+              <span class="text--secondary">Priority: </span>
+              <v-btn-toggle
+                v-model="item.priority"
+                active-class
+                mandatory
+                dense
+                light
+              >
+                <v-btn
+                  v-for="(value, name) in priorities"
+                  small
+                  :key="name"
+                  :value="name"
+                  :color="value"
+                >
+                  <div>{{name}}</div>
+                </v-btn>
+              </v-btn-toggle>
+            </p>
+            <div class="text--secondary">Last modified: {{item.updated}}</div>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -133,10 +135,17 @@ export default {
   data: () => ({
     date: null,
     todoitems: [],
-    priorities: ['normal', 'urgent', 'critical'],
-    color: ['success', 'purple', 'yellow'],
+    priorities: {
+      normal: 'green',
+      priority: 'yellow',
+      urgent: 'orange',
+      critical: 'red',
+    },
   }),
   methods: {
+    getPriorityColor(priority) {
+      return this.priorities[priority];
+    },
     getTodos() {
       axios.get('http://localhost:8000/api/v1/todoitems/', {
         headers: {
