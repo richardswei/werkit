@@ -70,25 +70,13 @@
               filled
               dense
             ></v-text-field>
-            <v-menu
-              v-model="menu2"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="date"
-                  label="Due Date"
-                  prepend-icon="event"
-                  readonly
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
-            </v-menu>
+            <v-text-field
+              v-model="item.due"
+              label="Picker in menu"
+              prepend-icon="event"
+              readonly
+              @click.stop="toggleDatePicker(item.id, item.due)"
+            ></v-text-field>
             <v-textarea
               v-model="item.description"
               label="Description"
@@ -121,6 +109,18 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <v-dialog
+        ref="dialog"
+        v-model="datePicker.show"
+        :return-value.sync="datePicker.date"
+        width="290px"
+      >
+        <v-date-picker v-model="datePicker.date" scrollable>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="datePicker.show = false">Cancel</v-btn>
+          <v-btn text color="primary" @click="setDate()">OK</v-btn>
+        </v-date-picker>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -133,7 +133,11 @@ export default {
     this.getTodos();
   },
   data: () => ({
-    date: null,
+    datePicker: {
+      date: null,
+      show: false,
+      itemId: null,
+    },
     todoitems: [],
     priorities: {
       normal: 'green',
@@ -143,6 +147,22 @@ export default {
     },
   }),
   methods: {
+    toggleDatePicker(itemId, due) {
+      this.datePicker = {
+        date: due,
+        show: true,
+        itemId,
+      };
+    },
+    setDate() {
+      const index = this.todoitems.findIndex((element) => element.id === this.datePicker.itemId);
+      this.todoitems[index].due = this.datePicker.date;
+      this.datePicker = {
+        due: null,
+        show: false,
+        itemId: null,
+      };
+    },
     getPriorityColor(priority) {
       return this.priorities[priority];
     },
@@ -153,8 +173,9 @@ export default {
         },
       })
         .then((response) => {
+          const todoitems = response.data.map((item) => ({ ...item, due: '2020-04-02' }));
           console.log(response.data);
-          this.todoitems = response.data;
+          this.todoitems = todoitems;
         })
         .catch((e) => {
           console.log(e);
