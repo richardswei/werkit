@@ -71,11 +71,18 @@
               dense
             ></v-text-field>
             <v-text-field
-              v-model="item.due"
-              label="Picker in menu"
+              v-model="item.dueDate"
+              label="Due Date"
               prepend-icon="event"
               readonly
-              @click.stop="toggleDatePicker(item.id, item.due)"
+              @click.stop="toggleDatePicker(item.id, item.dueDate)"
+            ></v-text-field>
+            <v-text-field
+              v-model="item.dueTime"
+              label="Due Time"
+              prepend-icon="access_time"
+              readonly
+              @click.stop="toggleTimePicker(item.id, item.dueTime)"
             ></v-text-field>
             <v-textarea
               v-model="item.description"
@@ -89,10 +96,8 @@
               <span class="text--secondary">Priority: </span>
               <v-btn-toggle
                 v-model="item.priority"
-                active-class
                 mandatory
                 dense
-                light
               >
                 <v-btn
                   v-for="(value, name) in priorities"
@@ -110,16 +115,31 @@
         </v-expansion-panel>
       </v-expansion-panels>
       <v-dialog
-        ref="dialog"
+        ref="dateDialog"
         v-model="datePicker.show"
-        :return-value.sync="datePicker.date"
+        :return-value.sync="datePicker.due"
         width="290px"
       >
-        <v-date-picker v-model="datePicker.date" scrollable>
+        <v-date-picker v-model="datePicker.due" scrollable>
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="datePicker.show = false">Cancel</v-btn>
+          <v-btn text color="primary" @click="datePicker.show=false">Cancel</v-btn>
           <v-btn text color="primary" @click="setDate()">OK</v-btn>
         </v-date-picker>
+      </v-dialog>
+      <v-dialog
+        ref="timeDialog"
+        v-model="timePicker.show"
+        :return-value.sync="timePicker.due"
+        width="290px"
+      >
+        <v-time-picker
+          v-model="timePicker.due"
+          v-if="timePicker.due"
+        >
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="timePicker.show=false">Cancel</v-btn>
+          <v-btn text color="primary" @click="setTime()">OK</v-btn>
+        </v-time-picker>
       </v-dialog>
     </v-container>
   </div>
@@ -134,7 +154,12 @@ export default {
   },
   data: () => ({
     datePicker: {
-      date: null,
+      due: null,
+      show: false,
+      itemId: null,
+    },
+    timePicker: {
+      due: null,
       show: false,
       itemId: null,
     },
@@ -149,16 +174,35 @@ export default {
   methods: {
     toggleDatePicker(itemId, due) {
       this.datePicker = {
-        date: due,
+        due,
+        show: true,
+        itemId,
+      };
+    },
+    toggleTimePicker(itemId, due) {
+      this.timePicker = {
+        due,
         show: true,
         itemId,
       };
     },
     setDate() {
-      const index = this.todoitems.findIndex((element) => element.id === this.datePicker.itemId);
-      this.todoitems[index].due = this.datePicker.date;
+      const index = this.todoitems.findIndex((element) => element.id
+        === this.datePicker.itemId);
+      this.todoitems[index].dueDate = this.datePicker.due;
       this.datePicker = {
         due: null,
+        show: false,
+        itemId: null,
+      };
+    },
+    setTime() {
+      const index = this.todoitems.findIndex((element) => element.id
+        === this.timePicker.itemId);
+      this.$refs.timeDialog.save(this.datePicker.due);
+      this.todoitems[index].dueTime = this.timePicker.due;
+      this.timePicker = {
+        due: this.timePicker.due,
         show: false,
         itemId: null,
       };
@@ -173,7 +217,11 @@ export default {
         },
       })
         .then((response) => {
-          const todoitems = response.data.map((item) => ({ ...item, due: '2020-04-02' }));
+          const todoitems = response.data.map((item) => ({
+            ...item,
+            dueDate: '2020-04-02',
+            dueTime: '10:15',
+          }));
           console.log(response.data);
           this.todoitems = todoitems;
         })
@@ -184,3 +232,9 @@ export default {
   },
 };
 </script>
+<style>
+.v-btn--active .v-btn__content {
+  font-weight: bolder;
+  font-style: italic;
+}
+</style>
