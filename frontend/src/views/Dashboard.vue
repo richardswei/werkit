@@ -27,7 +27,7 @@
                       v-else
                       key="1"
                     >
-                      Due: {{item.due}}
+                      Due: {{item.dueDate}} @ {{item.dueTime}}
                     </span>
                   </v-col>
                   <v-col
@@ -70,20 +70,30 @@
               filled
               dense
             ></v-text-field>
-            <v-text-field
-              v-model="item.dueDate"
-              label="Due Date"
-              prepend-icon="event"
-              readonly
-              @click.stop="toggleDatePicker(item.id, item.dueDate)"
-            ></v-text-field>
-            <v-text-field
-              v-model="item.dueTime"
-              label="Due Time"
-              prepend-icon="access_time"
-              readonly
-              @click.stop="toggleTimePicker(item.id, item.dueTime)"
-            ></v-text-field>
+            <v-row>
+              <v-col cols="6">
+                <div class="d-flex justify-around">
+                  <v-icon
+                    @click.stop="toggleDatePicker(item.id, item.dueDate)"
+                  >event</v-icon>
+                  <v-text-field
+                    v-model="item.dueDate"
+                    label="Due Date"
+                  ></v-text-field>
+                </div>
+              </v-col>
+              <v-col cols="6">
+                <div class="d-flex justify-around">
+                  <v-icon
+                    @click.stop="toggleTimePicker(item.id, item.dueTime)"
+                  >access_time</v-icon>
+                  <v-text-field
+                    v-model="item.dueTime"
+                    label="Due Time"
+                  ></v-text-field>
+                </div>
+              </v-col>
+            </v-row>
             <v-textarea
               v-model="item.description"
               label="Description"
@@ -174,14 +184,14 @@ export default {
   methods: {
     toggleDatePicker(itemId, due) {
       this.datePicker = {
-        due,
+        due: due || null,
         show: true,
         itemId,
       };
     },
     toggleTimePicker(itemId, due) {
       this.timePicker = {
-        due,
+        due: due || null,
         show: true,
         itemId,
       };
@@ -201,8 +211,10 @@ export default {
         === this.timePicker.itemId);
       this.$refs.timeDialog.save(this.datePicker.due);
       this.todoitems[index].dueTime = this.timePicker.due;
+      const d = new Date();
+      const currentTime = d.getTime();
       this.timePicker = {
-        due: this.timePicker.due,
+        due: this.timePicker.due || currentTime,
         show: false,
         itemId: null,
       };
@@ -218,11 +230,16 @@ export default {
       })
         .then((response) => {
           const todoitems = response.data.map((item) => ({
-            ...item,
+            id: item.id,
+            created: item.created,
+            updated: (new Date(item.updated)).toLocaleString(),
+            title: item.title,
+            description: item.description,
+            user_id: item.user_id,
+            priority: Object.keys(this.priorities)[item.priority],
             dueDate: '2020-04-02',
             dueTime: '10:15',
           }));
-          console.log(response.data);
           this.todoitems = todoitems;
         })
         .catch((e) => {
