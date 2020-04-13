@@ -4,6 +4,27 @@
     style="position: relative;"
   >
     <v-container fluid>
+      <v-toolbar
+        dense
+        dark
+        class="primary"
+      >
+        <v-app-bar-nav-icon>
+          <v-icon>dashboard</v-icon>
+        </v-app-bar-nav-icon>
+        <v-toolbar-title>Todo Dashboard</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click.stop="addTodo()"
+        ><v-icon>mdi-plus</v-icon></v-btn>
+      </v-toolbar>
       <v-expansion-panels>
         <v-expansion-panel
           v-for="item in todoitems"
@@ -13,36 +34,18 @@
             <template v-slot:default="{ open }">
               <v-fade-transition leave-absolute>
                 <v-row no-gutters>
-                  <v-col
-                    cols="3"
-                    class="text--secondary"
-                  >
-                    <span
-                      v-if="open"
-                      key="0"
-                    >
+                  <v-col cols="3" class="text--secondary">
+                    <span v-if="open" key="0" >
                       Edit Mode
                     </span>
-                    <span
-                      v-else
-                      key="1"
-                    >
+                    <span v-else key="1" >
                       Due: {{item.dueDate}} @ {{item.dueTime}}
                     </span>
                   </v-col>
-                  <v-col
-                    cols="8"
-                    class="text--secondary"
-                  >
-                    <span
-                      v-if="open"
-                      key="0"
-                    >
+                  <v-col cols="8" class="text--secondary">
+                    <span v-if="open" key="0" >
                     </span>
-                    <span
-                      v-else
-                      key="1"
-                    >
+                    <span v-else key="1" >
                       <div text-truncate>
                         <strong>{{item.title}}</strong> - {{item.description}}
                       </div>
@@ -72,10 +75,13 @@
             ></v-text-field>
             <v-row>
               <v-col cols="6">
-                <div class="d-flex justify-around">
-                  <v-icon
+                <div class="d-flex align-center">
+                  <v-btn
+                    depressed
                     @click.stop="toggleDatePicker(item.id, item.dueDate)"
-                  >event</v-icon>
+                  >
+                    <v-icon>event</v-icon>
+                  </v-btn>
                   <v-text-field
                     v-model="item.dueDate"
                     label="Due Date"
@@ -83,10 +89,13 @@
                 </div>
               </v-col>
               <v-col cols="6">
-                <div class="d-flex justify-around">
-                  <v-icon
+                <div class="d-flex align-center">
+                  <v-btn
+                    depressed
                     @click.stop="toggleTimePicker(item.id, item.dueTime)"
-                  >access_time</v-icon>
+                  >
+                    <v-icon>access_time</v-icon>
+                  </v-btn>
                   <v-text-field
                     v-model="item.dueTime"
                     label="Due Time"
@@ -240,11 +249,22 @@ export default {
             dueDate: '2020-04-02',
             dueTime: '10:15',
           }));
+          console.log(todoitems);
           this.todoitems = todoitems;
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    addTodo() {
+      const todo = {
+        title: '',
+        description: '',
+        priority: Object.keys(this.priorities)[0],
+        dueDate: '2020-04-02',
+        dueTime: '10:15',
+      };
+      this.todoitems.unshift(todo);
     },
   },
 };
