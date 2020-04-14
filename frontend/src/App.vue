@@ -24,7 +24,7 @@
         dark
         @click="toggleMenu"
       >
-          <v-icon>menu</v-icon>
+        <v-icon>menu</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
@@ -55,7 +55,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 

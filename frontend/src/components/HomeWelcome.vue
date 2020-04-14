@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="welcome">
     <v-content>
       <v-card class="elevation-12">
         <v-card-text>
@@ -29,4 +29,7 @@ export default {
 </script>
 
 <style>
+.welcome {
+  text-align: center;
+}
 </style>
