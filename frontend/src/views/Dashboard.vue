@@ -77,6 +77,7 @@
               <v-col cols="6">
                 <div class="d-flex align-center">
                   <v-btn
+                    text
                     depressed
                     @click.stop="toggleDatePicker(item.id, item.dueDate)"
                   >
@@ -91,6 +92,7 @@
               <v-col cols="6">
                 <div class="d-flex align-center">
                   <v-btn
+                    text
                     depressed
                     @click.stop="toggleTimePicker(item.id, item.dueTime)"
                   >
@@ -153,7 +155,7 @@
       >
         <v-time-picker
           v-model="timePicker.due"
-          v-if="timePicker.due"
+          scrollable
         >
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="timePicker.show=false">Cancel</v-btn>
@@ -199,8 +201,11 @@ export default {
       };
     },
     toggleTimePicker(itemId, due) {
+      // TODO USE MOMENT JS TO UNIFY TIME FORMAT
+      const timeArr = due.split(':');
+      // format for picker needs to be HH:MM
       this.timePicker = {
-        due: due || null,
+        due: `${timeArr[0]}:${timeArr[1]}` || null,
         show: true,
         itemId,
       };
@@ -216,14 +221,18 @@ export default {
       };
     },
     setTime() {
+      // TODO USE MOMENT JS TO UNIFY TIME FORMAT
       const index = this.todoitems.findIndex((element) => element.id
         === this.timePicker.itemId);
-      this.$refs.timeDialog.save(this.datePicker.due);
-      this.todoitems[index].dueTime = this.timePicker.due;
-      const d = new Date();
-      const currentTime = d.getTime();
+      const pickerTimeArr = this.timePicker.due.split(':');
+      const epoch = new Date().setHours(pickerTimeArr[0], pickerTimeArr[1]);
+      const time = new Date(epoch).toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit',
+      });
+      this.$refs.timeDialog.save(`${pickerTimeArr[0]}:${pickerTimeArr[1]}`);
+      this.todoitems[index].dueTime = time;
       this.timePicker = {
-        due: this.timePicker.due || currentTime,
+        due: `${pickerTimeArr[0]}:${pickerTimeArr[1]}`,
         show: false,
         itemId: null,
       };
@@ -246,8 +255,10 @@ export default {
             description: item.description,
             user_id: item.user_id,
             priority: Object.keys(this.priorities)[item.priority],
-            dueDate: '2020-04-02',
-            dueTime: '10:15',
+            dueDate: new Date(item.due).toLocaleDateString(),
+            dueTime: new Date(item.due).toLocaleTimeString('en-US', {
+              hour: '2-digit', minute: '2-digit',
+            }),
           }));
           console.log(todoitems);
           this.todoitems = todoitems;
@@ -257,14 +268,32 @@ export default {
         });
     },
     addTodo() {
+      const now = new Date(Date.now() + (3600 * 1000 * 24));
       const todo = {
         title: '',
         description: '',
         priority: Object.keys(this.priorities)[0],
-        dueDate: '2020-04-02',
-        dueTime: '10:15',
+        dueDate: now.toLocaleDateString(),
+        dueTime: now.toLocaleTimeString('en-US', {
+          hour: '2-digit', minute: '2-digit',
+        }),
       };
       this.todoitems.unshift(todo);
+    },
+    saveTodo(item) {
+      // if item doesnt have an id it's new.
+
+      const config = {
+        method: item.id ? 'put' : 'post',
+        url: item.id
+          ? 'http://localhost:8000/api/v1/todoitems/item.id'
+          : 'http://localhost:8000/api/v1/todoitems/',
+        data: item,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
+      };
+      axios({ config });
     },
   },
 };
