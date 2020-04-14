@@ -155,6 +155,7 @@
       >
         <v-time-picker
           v-model="timePicker.due"
+          v-if="timePicker.show"
           scrollable
         >
           <v-spacer></v-spacer>
@@ -167,6 +168,7 @@
 </template>
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   name: 'Dashboard',
@@ -194,18 +196,20 @@ export default {
   }),
   methods: {
     toggleDatePicker(itemId, due) {
+      // format for picker needs to be YYYY-MM-DD
+      const formattedDate = moment(due).format('YYYY-MM-DD');
       this.datePicker = {
-        due: due || null,
+        due: formattedDate,
         show: true,
         itemId,
       };
     },
     toggleTimePicker(itemId, due) {
-      // TODO USE MOMENT JS TO UNIFY TIME FORMAT
-      const timeArr = due.split(':');
+      // using fake date as placeholder
       // format for picker needs to be HH:MM
+      const formattedTime = moment(`1/1/11 ${due}`).format('HH:mm');
       this.timePicker = {
-        due: `${timeArr[0]}:${timeArr[1]}` || null,
+        due: formattedTime,
         show: true,
         itemId,
       };
@@ -214,28 +218,16 @@ export default {
       const index = this.todoitems.findIndex((element) => element.id
         === this.datePicker.itemId);
       this.todoitems[index].dueDate = this.datePicker.due;
-      this.datePicker = {
-        due: null,
-        show: false,
-        itemId: null,
-      };
     },
     setTime() {
-      // TODO USE MOMENT JS TO UNIFY TIME FORMAT
       const index = this.todoitems.findIndex((element) => element.id
         === this.timePicker.itemId);
-      const pickerTimeArr = this.timePicker.due.split(':');
-      const epoch = new Date().setHours(pickerTimeArr[0], pickerTimeArr[1]);
-      const time = new Date(epoch).toLocaleTimeString('en-US', {
-        hour: '2-digit', minute: '2-digit',
-      });
-      this.$refs.timeDialog.save(`${pickerTimeArr[0]}:${pickerTimeArr[1]}`);
-      this.todoitems[index].dueTime = time;
-      this.timePicker = {
-        due: `${pickerTimeArr[0]}:${pickerTimeArr[1]}`,
-        show: false,
-        itemId: null,
-      };
+      // using fake date as placeholder
+      this.$refs.timeDialog.save(this.timePicker.due);
+      this.timePicker.show = false;
+      const momentObj = moment(`1/1/11 ${this.timePicker.due}`);
+      // const formattedTime = momentObj.format('HH:mm');
+      this.todoitems[index].dueTime = momentObj.format('LT');
     },
     getPriorityColor(priority) {
       return this.priorities[priority];
@@ -255,10 +247,8 @@ export default {
             description: item.description,
             user_id: item.user_id,
             priority: Object.keys(this.priorities)[item.priority],
-            dueDate: new Date(item.due).toLocaleDateString(),
-            dueTime: new Date(item.due).toLocaleTimeString('en-US', {
-              hour: '2-digit', minute: '2-digit',
-            }),
+            dueDate: moment(item.due).format('L'),
+            dueTime: moment(item.due).format('LT'),
           }));
           console.log(todoitems);
           this.todoitems = todoitems;
@@ -268,15 +258,12 @@ export default {
         });
     },
     addTodo() {
-      const now = new Date(Date.now() + (3600 * 1000 * 24));
       const todo = {
         title: '',
         description: '',
         priority: Object.keys(this.priorities)[0],
-        dueDate: now.toLocaleDateString(),
-        dueTime: now.toLocaleTimeString('en-US', {
-          hour: '2-digit', minute: '2-digit',
-        }),
+        dueDate: moment().format('L'),
+        dueTime: moment().format('LT'),
       };
       this.todoitems.unshift(todo);
     },
