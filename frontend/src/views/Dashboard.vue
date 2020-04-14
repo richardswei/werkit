@@ -25,10 +25,12 @@
           @click.stop="addTodo()"
         ><v-icon>mdi-plus</v-icon></v-btn>
       </v-toolbar>
-      <v-expansion-panels>
+      <v-expansion-panels
+        v-model="expanded"
+      >
         <v-expansion-panel
-          v-for="item in todoitems"
-          :key="item.id"
+          v-for="(item, index) in todoitems"
+          :key="index"
         >
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
@@ -184,6 +186,7 @@ export default {
     this.getTodos();
   },
   data: () => ({
+    expanded: null,
     datePicker: {
       due: null,
       show: false,
@@ -249,7 +252,6 @@ export default {
         },
       })
         .then((response) => {
-          console.log(response);
           const todoitems = response.data.map((item) => ({
             id: item.id,
             created: item.created,
@@ -261,7 +263,6 @@ export default {
             dueDate: moment(item.due).format('L'),
             dueTime: moment(item.due).format('LT'),
           }));
-          console.log(todoitems);
           this.todoitems = todoitems;
         })
         .catch((e) => {
@@ -277,6 +278,9 @@ export default {
         dueTime: moment().add(1, 'hour').format('LT'),
       };
       this.todoitems.unshift(todo);
+      console.log(this.todoitems.map((item) => item.title));
+      this.expanded = 0;
+      console.log(this.expanded);
     },
     saveTodo(item) {
       const payloadKeys = [
@@ -302,7 +306,6 @@ export default {
           Authorization: `Token ${this.$store.state.token}`,
         },
       };
-      console.log(config);
       axios(config)
         .then((response) => {
           console.log(response);
