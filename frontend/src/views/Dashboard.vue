@@ -131,7 +131,15 @@
                 </v-btn>
               </v-btn-toggle>
             </p>
-            <div class="text--secondary">Last modified: {{item.updated}}</div>
+            <div>
+              <div class="text--secondary">
+                Last modified: {{(new Date(item.updated)).toLocaleString()}}
+              </div>
+              <v-spacer></v-spacer>
+              <v-btn
+                @click.stop="saveTodo(item)"
+              >Save</v-btn>
+            </div>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -217,7 +225,9 @@ export default {
     setDate() {
       const index = this.todoitems.findIndex((element) => element.id
         === this.datePicker.itemId);
-      this.todoitems[index].dueDate = this.datePicker.due;
+      // reformat to ui's display format
+      this.todoitems[index].dueDate = moment(this.datePicker.due).format('L');
+      this.datePicker.show = false;
     },
     setTime() {
       const index = this.todoitems.findIndex((element) => element.id
@@ -226,7 +236,7 @@ export default {
       this.$refs.timeDialog.save(this.timePicker.due);
       this.timePicker.show = false;
       const momentObj = moment(`1/1/11 ${this.timePicker.due}`);
-      // const formattedTime = momentObj.format('HH:mm');
+      // reformat to ui's display format
       this.todoitems[index].dueTime = momentObj.format('LT');
     },
     getPriorityColor(priority) {
@@ -239,10 +249,11 @@ export default {
         },
       })
         .then((response) => {
+          console.log(response);
           const todoitems = response.data.map((item) => ({
             id: item.id,
             created: item.created,
-            updated: (new Date(item.updated)).toLocaleString(),
+            updated: item.updated,
             title: item.title,
             description: item.description,
             user_id: item.user_id,
@@ -262,25 +273,42 @@ export default {
         title: '',
         description: '',
         priority: Object.keys(this.priorities)[0],
-        dueDate: moment().format('L'),
-        dueTime: moment().format('LT'),
+        dueDate: moment().add(1, 'day').format('L'),
+        dueTime: moment().add(1, 'hour').format('LT'),
       };
       this.todoitems.unshift(todo);
     },
     saveTodo(item) {
+      const payloadKeys = [
+        'due',
+        'title',
+        'description',
+        'priority',
+      ];
+      const payload = Object.fromEntries(
+        Object.entries(item)
+          .filter(([key]) => payloadKeys.includes(key)),
+      );
+      payload.priority = Object.keys(this.priorities).indexOf(item.priority);
+      payload.due = moment(`${item.dueDate} ${item.dueTime}`).toJSON();
       // if item doesnt have an id it's new.
-
       const config = {
         method: item.id ? 'put' : 'post',
         url: item.id
-          ? 'http://localhost:8000/api/v1/todoitems/item.id'
+          ? `http://localhost:8000/api/v1/todoitems/${item.id}/`
           : 'http://localhost:8000/api/v1/todoitems/',
-        data: item,
+        data: payload,
         headers: {
           Authorization: `Token ${this.$store.state.token}`,
         },
       };
-      axios({ config });
+      console.log(config);
+      axios(config)
+        .then((response) => {
+          console.log(response);
+        }, (error) => {
+          console.log(error);
+        });
     },
   },
 };
