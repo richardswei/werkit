@@ -26,34 +26,43 @@
         ><v-icon>mdi-plus</v-icon></v-btn>
       </v-toolbar>
       <v-expansion-panels
+        accordion
         v-model="expanded"
       >
         <v-expansion-panel
-          v-for="(item, index) in todoitems"
+          v-for="(item, index) in todoItems"
           :key="index"
         >
           <v-expansion-panel-header>
             <template v-slot:default="{ open }">
               <v-fade-transition leave-absolute>
-                <v-row no-gutters>
-                  <v-col cols="3" class="text--secondary">
-                    <span v-if="open" key="0" >
+                <v-row dense >
+                  <v-col
+                    cols="auto"
+                    class="text--primary"
+                  >
+                    <span
+                      v-if="open"
+                      key="0"
+                    >
                       Edit Mode
                     </span>
                     <span v-else key="1" >
-                      Due: {{item.dueDate}} @ {{item.dueTime}}
+                      Due: {{item.dueDate}}
+                      <br>
+                      {{item.dueTime}}
                     </span>
                   </v-col>
-                  <v-col cols="8" class="text--secondary">
-                    <span v-if="open" key="0" >
-                    </span>
-                    <span v-else key="1" >
-                      <div text-truncate>
-                        <strong>{{item.title}}</strong> - {{item.description}}
-                      </div>
-                    </span>
+                  <v-col v-if="open" key="0">
                   </v-col>
-                  <v-col cols="1" >
+                  <v-col v-else key="1" cols="9" class="text--secondary">
+                    <strong class="text--primary">{{item.title}}</strong>
+                    - {{item.description}}
+                  </v-col>
+                  <v-col
+                    cols="auto"
+                    class="ml-auto mt-0"
+                  >
                     <v-chip
                       x-small
                       :color="getPriorityColor(item.priority)"
@@ -68,12 +77,15 @@
               <v-icon color="primary">expand_more</v-icon>
             </template>
           </v-expansion-panel-header>
-          <v-expansion-panel-content>
+          <v-expansion-panel-content
+            class="editMode"
+          >
             <v-text-field
               v-model="item.title"
               label="Title"
               filled
               dense
+              class="pt-3"
             ></v-text-field>
             <v-row>
               <v-col cols="6">
@@ -139,7 +151,7 @@
               </div>
               <v-spacer></v-spacer>
               <v-btn
-                @click.stop="saveTodo(item)"
+                @click.stop="saveTodo(item, index)"
               >Save</v-btn>
             </div>
           </v-expansion-panel-content>
@@ -197,7 +209,7 @@ export default {
       show: false,
       itemId: null,
     },
-    todoitems: [],
+    todoItems: [],
     priorities: {
       normal: 'green',
       priority: 'yellow',
@@ -226,21 +238,21 @@ export default {
       };
     },
     setDate() {
-      const index = this.todoitems.findIndex((element) => element.id
+      const index = this.todoItems.findIndex((element) => element.id
         === this.datePicker.itemId);
       // reformat to ui's display format
-      this.todoitems[index].dueDate = moment(this.datePicker.due).format('L');
+      this.todoItems[index].dueDate = moment(this.datePicker.due).format('L');
       this.datePicker.show = false;
     },
     setTime() {
-      const index = this.todoitems.findIndex((element) => element.id
+      const index = this.todoItems.findIndex((element) => element.id
         === this.timePicker.itemId);
       // using fake date as placeholder
       this.$refs.timeDialog.save(this.timePicker.due);
       this.timePicker.show = false;
       const momentObj = moment(`1/1/11 ${this.timePicker.due}`);
       // reformat to ui's display format
-      this.todoitems[index].dueTime = momentObj.format('LT');
+      this.todoItems[index].dueTime = momentObj.format('LT');
     },
     getPriorityColor(priority) {
       return this.priorities[priority];
@@ -252,7 +264,7 @@ export default {
         },
       })
         .then((response) => {
-          const todoitems = response.data.map((item) => ({
+          const todoItems = response.data.map((item) => ({
             id: item.id,
             created: item.created,
             updated: item.updated,
@@ -262,8 +274,9 @@ export default {
             priority: Object.keys(this.priorities)[item.priority],
             dueDate: moment(item.due).format('L'),
             dueTime: moment(item.due).format('LT'),
+            unsaved: false,
           }));
-          this.todoitems = todoitems;
+          this.todoItems = todoItems;
         })
         .catch((e) => {
           console.log(e);
@@ -271,18 +284,22 @@ export default {
     },
     addTodo() {
       const todo = {
+        id: null,
+        created: null,
+        updated: null,
         title: '',
         description: '',
         priority: Object.keys(this.priorities)[0],
         dueDate: moment().add(1, 'day').format('L'),
         dueTime: moment().add(1, 'hour').format('LT'),
+        unsaved: true,
       };
-      this.todoitems.unshift(todo);
-      console.log(this.todoitems.map((item) => item.title));
+      // add empty todo to top of list
+      this.todoItems.unshift(todo);
+      // open the most recently added item
       this.expanded = 0;
-      console.log(this.expanded);
     },
-    saveTodo(item) {
+    saveTodo(item, index) {
       const payloadKeys = [
         'due',
         'title',
@@ -309,6 +326,10 @@ export default {
       axios(config)
         .then((response) => {
           console.log(response);
+          // close todo after successfully saving
+          this.todoItems[index].unsaved = false;
+          this.todoItems[index].id = response.data.id;
+          this.expanded = null;
         }, (error) => {
           console.log(error);
         });
@@ -320,5 +341,8 @@ export default {
 .v-btn--active .v-btn__content {
   font-weight: bolder;
   font-style: italic;
+}
+.editMode {
+  background-color: rgba(226,220,205,0.2);
 }
 </style>

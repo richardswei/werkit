@@ -13,7 +13,8 @@ class TodoItem(models.Model):
         CRITICAL = 3
 
     class Meta:
-        ordering = ['updated']
+        # order by updated in reverse order (most recent first)
+        ordering = ['-updated']
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
@@ -30,7 +31,7 @@ class TodoItem(models.Model):
 
 class Note(models.Model):
     class Meta:
-        ordering = ['updated']
+        ordering = ['-updated']
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
