@@ -25,63 +25,59 @@
           @click.stop="addTodo()"
         ><v-icon>mdi-plus</v-icon></v-btn>
       </v-toolbar>
-      <v-expansion-panels
-        accordion
-        v-model="expanded"
+      <v-card
+        outlined
+        dense
+        v-for="(item, index) in todoItems"
+        :key="index"
       >
-        <v-expansion-panel
-          v-for="(item, index) in todoItems"
-          :key="index"
-        >
-          <v-expansion-panel-header>
-            <template v-slot:default="{ open }">
-              <v-fade-transition leave-absolute>
-                <v-row dense >
-                  <v-col
-                    cols="auto"
-                    class="text--primary"
-                  >
-                    <span
-                      v-if="open"
-                      key="0"
-                    >
-                      Edit Mode
-                    </span>
-                    <span v-else key="1" >
-                      Due: {{item.dueDate}}
-                      <br>
-                      {{item.dueTime}}
-                    </span>
-                  </v-col>
-                  <v-col v-if="open" key="0">
-                  </v-col>
-                  <v-col v-else key="1" cols="9" class="text--secondary">
-                    <strong class="text--primary">{{item.title}}</strong>
-                    - {{item.description}}
-                  </v-col>
-                  <v-col
-                    cols="auto"
-                    class="ml-auto mt-0"
-                  >
-                    <v-chip
-                      x-small
-                      :color="getPriorityColor(item.priority)"
-                    >
-                      {{item.priority}}
-                    </v-chip>
-                  </v-col>
-                </v-row>
-              </v-fade-transition>
-            </template>
-            <template v-slot:actions>
-              <v-icon color="primary">expand_more</v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content
-            class="editMode"
+        <v-row no-gutters>
+          <v-col cols="11">
+            <v-list-item>
+              <v-list-item-avatar
+                :color="getPriorityColor(item.priority)"
+              ></v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{item.title}}</v-list-item-title>
+                <v-list-item-subtitle>
+                  Due: {{item.dueDate}} - {{item.dueTime}}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  {{item.description}}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-col>
+          <v-col
+            cols="auto"
+            class="ml-auto mr-1"
           >
+            <v-btn small icon color="teal">
+              <v-icon>mdi-check</v-icon>
+            </v-btn>
+            <br>
+            <v-btn small icon color="grey">
+              <v-icon>mdi-square-edit-outline</v-icon>
+            </v-btn>
+            <br>
+            <v-btn small icon color="red">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+
+          </v-col>
+        </v-row>
+      </v-card>
+
+      <v-dialog
+        class="editDialog"
+        ref="editDialog"
+        v-model="editDialog.show"
+        max-width="600px"
+      >
+        <v-card>
+          <v-container>
             <v-text-field
-              v-model="item.title"
+              v-model="editDialog.data.title"
               label="Title"
               filled
               dense
@@ -93,12 +89,12 @@
                   <v-btn
                     text
                     depressed
-                    @click.stop="toggleDatePicker(item.id, item.dueDate)"
+                    @click.stop="toggleDatePicker(editDialog.data.dueDate)"
                   >
                     <v-icon>event</v-icon>
                   </v-btn>
                   <v-text-field
-                    v-model="item.dueDate"
+                    v-model="editDialog.data.dueDate"
                     label="Due Date"
                   ></v-text-field>
                 </div>
@@ -108,19 +104,19 @@
                   <v-btn
                     text
                     depressed
-                    @click.stop="toggleTimePicker(item.id, item.dueTime)"
+                    @click.stop="toggleTimePicker(editDialog.data.id, editDialog.data.dueTime)"
                   >
                     <v-icon>access_time</v-icon>
                   </v-btn>
                   <v-text-field
-                    v-model="item.dueTime"
+                    v-model="editDialog.data.dueTime"
                     label="Due Time"
                   ></v-text-field>
                 </div>
               </v-col>
             </v-row>
             <v-textarea
-              v-model="item.description"
+              v-model="editDialog.data.description"
               label="Description"
               filled
               dense
@@ -130,7 +126,7 @@
             <p>
               <span class="text--secondary">Priority: </span>
               <v-btn-toggle
-                v-model="item.priority"
+                v-model="editDialog.data.priority"
                 mandatory
                 dense
               >
@@ -147,16 +143,23 @@
             </p>
             <div>
               <div class="text--secondary">
-                Last modified: {{(new Date(item.updated)).toLocaleString()}}
+                Last modified: {{editDialog.data.updated
+                  ? (new Date(editDialog.data.updated)).toLocaleString()
+                  : 'Never'}}
               </div>
               <v-spacer></v-spacer>
               <v-btn
-                @click.stop="saveTodo(item, index)"
+                @click.stop="saveTodo(editDialog.data)"
               >Save</v-btn>
+              <v-btn
+                color="blue darken-1"
+                @click.stop="editDialog.show=false"
+              >Close</v-btn>
             </div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+          </v-container>
+        </v-card>
+      </v-dialog>
+
       <v-dialog
         ref="dateDialog"
         v-model="datePicker.show"
@@ -198,16 +201,17 @@ export default {
     this.getTodos();
   },
   data: () => ({
-    expanded: null,
+    editDialog: {
+      data: {},
+      show: false,
+    },
     datePicker: {
       due: null,
       show: false,
-      itemId: null,
     },
     timePicker: {
       due: null,
       show: false,
-      itemId: null,
     },
     todoItems: [],
     priorities: {
@@ -218,41 +222,33 @@ export default {
     },
   }),
   methods: {
-    toggleDatePicker(itemId, due) {
+    toggleDatePicker(due) {
       // format for picker needs to be YYYY-MM-DD
       const formattedDate = moment(due).format('YYYY-MM-DD');
       this.datePicker = {
         due: formattedDate,
         show: true,
-        itemId,
       };
     },
-    toggleTimePicker(itemId, due) {
+    toggleTimePicker(due) {
       // using fake date as placeholder
       // format for picker needs to be HH:MM
       const formattedTime = moment(`1/1/11 ${due}`).format('HH:mm');
       this.timePicker = {
         due: formattedTime,
         show: true,
-        itemId,
       };
     },
     setDate() {
-      const index = this.todoItems.findIndex((element) => element.id
-        === this.datePicker.itemId);
-      // reformat to ui's display format
-      this.todoItems[index].dueDate = moment(this.datePicker.due).format('L');
+      this.editDialog.data.dueDate = moment(this.datePicker.due).format('L');
       this.datePicker.show = false;
     },
     setTime() {
-      const index = this.todoItems.findIndex((element) => element.id
-        === this.timePicker.itemId);
-      // using fake date as placeholder
       this.$refs.timeDialog.save(this.timePicker.due);
       this.timePicker.show = false;
       const momentObj = moment(`1/1/11 ${this.timePicker.due}`);
       // reformat to ui's display format
-      this.todoItems[index].dueTime = momentObj.format('LT');
+      this.editDialog.data.dueTime = momentObj.format('LT');
     },
     getPriorityColor(priority) {
       return this.priorities[priority];
@@ -274,7 +270,6 @@ export default {
             priority: Object.keys(this.priorities)[item.priority],
             dueDate: moment(item.due).format('L'),
             dueTime: moment(item.due).format('LT'),
-            unsaved: false,
           }));
           this.todoItems = todoItems;
         })
@@ -292,12 +287,10 @@ export default {
         priority: Object.keys(this.priorities)[0],
         dueDate: moment().add(1, 'day').format('L'),
         dueTime: moment().add(1, 'hour').format('LT'),
-        unsaved: true,
       };
-      // add empty todo to top of list
-      this.todoItems.unshift(todo);
-      // open the most recently added item
-      this.expanded = 0;
+      console.log(todo);
+      this.editDialog.data = todo;
+      this.editDialog.show = true;
     },
     saveTodo(item, index) {
       const payloadKeys = [
@@ -327,9 +320,40 @@ export default {
         .then((response) => {
           console.log(response);
           // close todo after successfully saving
-          this.todoItems[index].unsaved = false;
-          this.todoItems[index].id = response.data.id;
-          this.expanded = null;
+          if (item.id) {
+            this.todoItems[index].id = response.data.id;
+          } else {
+            const todoItem = {
+              id: response.data.id,
+              created: response.data.created,
+              updated: response.data.updated,
+              title: response.data.title,
+              description: response.data.description,
+              user_id: response.data.user_id,
+              priority: Object.keys(this.priorities)[response.data.priority],
+              dueDate: moment(response.data.due).format('L'),
+              dueTime: moment(response.data.due).format('LT'),
+            };
+            this.todoItems.unshift(todoItem);
+            this.editDialog.show = false;
+          }
+        }, (error) => {
+          console.log(error);
+        });
+    },
+    deleteTodo(item, index) {
+      const config = {
+        method: 'delete',
+        url: `http://localhost:8000/api/v1/todoitems/${item.id}/`,
+        headers: {
+          Authorization: `Token ${this.$store.state.token}`,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          console.log(response);
+          // close todo after successful deletion
+          this.todoItems.splice(index, 1);
         }, (error) => {
           console.log(error);
         });
@@ -341,8 +365,5 @@ export default {
 .v-btn--active .v-btn__content {
   font-weight: bolder;
   font-style: italic;
-}
-.editMode {
-  background-color: rgba(226,220,205,0.2);
 }
 </style>
