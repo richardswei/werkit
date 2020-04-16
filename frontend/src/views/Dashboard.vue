@@ -43,7 +43,7 @@
                   Due: {{item.dueDate}} - {{item.dueTime}}
                 </v-list-item-subtitle>
                 <v-list-item-subtitle>
-                  {{item.description}}
+                  {{item.description.length ? item.description : "-- No Description --"}}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -56,7 +56,11 @@
               <v-icon>mdi-check</v-icon>
             </v-btn>
             <br>
-            <v-btn small icon color="grey">
+            <v-btn
+              @click.stop="openEditDialog(item, index)"
+              small
+              icon
+              color="grey">
               <v-icon>mdi-square-edit-outline</v-icon>
             </v-btn>
             <br>
@@ -104,7 +108,7 @@
                   <v-btn
                     text
                     depressed
-                    @click.stop="toggleTimePicker(editDialog.data.id, editDialog.data.dueTime)"
+                    @click.stop="toggleTimePicker(editDialog.data.dueTime)"
                   >
                     <v-icon>access_time</v-icon>
                   </v-btn>
@@ -202,6 +206,7 @@ export default {
   },
   data: () => ({
     editDialog: {
+      index: null,
       data: {},
       show: false,
     },
@@ -288,11 +293,14 @@ export default {
         dueDate: moment().add(1, 'day').format('L'),
         dueTime: moment().add(1, 'hour').format('LT'),
       };
-      console.log(todo);
-      this.editDialog.data = todo;
+      this.openEditDialog(todo);
+    },
+    openEditDialog(item, index = null) {
+      this.editDialog.data = item;
+      this.editDialog.index = index;
       this.editDialog.show = true;
     },
-    saveTodo(item, index) {
+    saveTodo(item) {
       const payloadKeys = [
         'due',
         'title',
@@ -318,25 +326,25 @@ export default {
       };
       axios(config)
         .then((response) => {
-          console.log(response);
-          // close todo after successfully saving
-          if (item.id) {
-            this.todoItems[index].id = response.data.id;
+          const todoItem = {
+            id: response.data.id,
+            created: response.data.created,
+            updated: response.data.updated,
+            title: response.data.title,
+            description: response.data.description,
+            user_id: response.data.user_id,
+            priority: Object.keys(this.priorities)[response.data.priority],
+            dueDate: moment(response.data.due).format('L'),
+            dueTime: moment(response.data.due).format('LT'),
+          };
+          // modify existing or add to list
+          if (this.editDialog.index) {
+            this.todoItems[this.editDialog.index] = todoItem;
           } else {
-            const todoItem = {
-              id: response.data.id,
-              created: response.data.created,
-              updated: response.data.updated,
-              title: response.data.title,
-              description: response.data.description,
-              user_id: response.data.user_id,
-              priority: Object.keys(this.priorities)[response.data.priority],
-              dueDate: moment(response.data.due).format('L'),
-              dueTime: moment(response.data.due).format('LT'),
-            };
             this.todoItems.unshift(todoItem);
-            this.editDialog.show = false;
           }
+          // close todo after successfully saving
+          this.editDialog.show = false;
         }, (error) => {
           console.log(error);
         });
