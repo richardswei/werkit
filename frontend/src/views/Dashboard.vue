@@ -7,7 +7,7 @@
       <v-toolbar
         dense
         dark
-        class="primary"
+        color="primary"
       >
         <v-app-bar-nav-icon>
           <v-icon>dashboard</v-icon>
@@ -79,6 +79,17 @@
         max-width="600px"
       >
         <v-card>
+          <v-toolbar
+            dark
+            color="primary"
+            elevation=0
+          >
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click.stop="editDialog.show=false"
+            ><v-icon>close</v-icon></v-btn>
+          </v-toolbar>
           <v-container>
             <v-text-field
               v-model="editDialog.data.title"
@@ -87,11 +98,19 @@
               dense
               class="pt-3"
             ></v-text-field>
+            <v-textarea
+              v-model="editDialog.data.description"
+              label="Description"
+              filled
+              dense
+              auto-grow
+              rows="3"
+            ></v-textarea>
             <v-row>
               <v-col cols="6">
                 <div class="d-flex align-center">
                   <v-btn
-                    text
+                    icon
                     depressed
                     @click.stop="toggleDatePicker(editDialog.data.dueDate)"
                   >
@@ -106,7 +125,7 @@
               <v-col cols="6">
                 <div class="d-flex align-center">
                   <v-btn
-                    text
+                    icon
                     depressed
                     @click.stop="toggleTimePicker(editDialog.data.dueTime)"
                   >
@@ -119,14 +138,6 @@
                 </div>
               </v-col>
             </v-row>
-            <v-textarea
-              v-model="editDialog.data.description"
-              label="Description"
-              filled
-              dense
-              auto-grow
-              rows="3"
-            ></v-textarea>
             <p>
               <span class="text--secondary">Priority: </span>
               <v-btn-toggle
@@ -146,19 +157,17 @@
               </v-btn-toggle>
             </p>
             <div>
-              <div class="text--secondary">
+              <span class="text--secondary">
                 Last modified: {{editDialog.data.updated
                   ? (new Date(editDialog.data.updated)).toLocaleString()
                   : 'Never'}}
-              </div>
-              <v-spacer></v-spacer>
-              <v-btn
-                @click.stop="saveTodo(editDialog.data)"
-              >Save</v-btn>
-              <v-btn
-                color="blue darken-1"
-                @click.stop="editDialog.show=false"
-              >Close</v-btn>
+              </span>
+              <span>
+                <v-btn
+                  icon
+                  @click.stop="saveTodo(editDialog.data)"
+                ><v-icon>save</v-icon></v-btn>
+              </span>
             </div>
           </v-container>
         </v-card>
@@ -296,7 +305,7 @@ export default {
       this.openEditDialog(todo);
     },
     openEditDialog(item, index = null) {
-      this.editDialog.data = item;
+      this.editDialog.data = { ...item };
       this.editDialog.index = index;
       this.editDialog.show = true;
     },
@@ -337,8 +346,8 @@ export default {
             dueDate: moment(response.data.due).format('L'),
             dueTime: moment(response.data.due).format('LT'),
           };
-          // modify existing or add to list
-          if (this.editDialog.index) {
+          // if index exists modify existing or add to list
+          if (Number.isInteger(this.editDialog.index)) {
             this.todoItems[this.editDialog.index] = todoItem;
           } else {
             this.todoItems.unshift(todoItem);
