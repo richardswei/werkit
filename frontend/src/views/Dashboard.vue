@@ -84,6 +84,8 @@
             color="primary"
             elevation=0
           >
+            <v-toolbar-title>{{Number.isInteger(editDialog.index)
+              ? "Edit Todo" : "New Todo" }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
               icon
@@ -92,14 +94,14 @@
           </v-toolbar>
           <v-container>
             <v-text-field
-              v-model="editDialog.data.title"
+              v-model="editDialog.title"
               label="Title"
               filled
               dense
               class="pt-3"
             ></v-text-field>
             <v-textarea
-              v-model="editDialog.data.description"
+              v-model="editDialog.description"
               label="Description"
               filled
               dense
@@ -112,12 +114,12 @@
                   <v-btn
                     icon
                     depressed
-                    @click.stop="toggleDatePicker(editDialog.data.dueDate)"
+                    @click.stop="toggleDatePicker(editDialog.dueDate)"
                   >
                     <v-icon>event</v-icon>
                   </v-btn>
                   <v-text-field
-                    v-model="editDialog.data.dueDate"
+                    v-model="editDialog.dueDate"
                     label="Due Date"
                   ></v-text-field>
                 </div>
@@ -127,12 +129,12 @@
                   <v-btn
                     icon
                     depressed
-                    @click.stop="toggleTimePicker(editDialog.data.dueTime)"
+                    @click.stop="toggleTimePicker(editDialog.dueTime)"
                   >
                     <v-icon>access_time</v-icon>
                   </v-btn>
                   <v-text-field
-                    v-model="editDialog.data.dueTime"
+                    v-model="editDialog.dueTime"
                     label="Due Time"
                   ></v-text-field>
                 </div>
@@ -141,7 +143,7 @@
             <p>
               <span class="text--secondary">Priority: </span>
               <v-btn-toggle
-                v-model="editDialog.data.priority"
+                v-model="editDialog.priority"
                 mandatory
                 dense
               >
@@ -158,14 +160,14 @@
             </p>
             <div>
               <span class="text--secondary">
-                Last modified: {{editDialog.data.updated
-                  ? (new Date(editDialog.data.updated)).toLocaleString()
+                Last modified: {{editDialog.updated
+                  ? (new Date(editDialog.updated)).toLocaleString()
                   : 'Never'}}
               </span>
               <span>
                 <v-btn
                   icon
-                  @click.stop="saveTodo(editDialog.data)"
+                  @click.stop="saveTodo(editDialog)"
                 ><v-icon>save</v-icon></v-btn>
               </span>
             </div>
@@ -216,7 +218,6 @@ export default {
   data: () => ({
     editDialog: {
       index: null,
-      data: {},
       show: false,
     },
     datePicker: {
@@ -254,7 +255,7 @@ export default {
       };
     },
     setDate() {
-      this.editDialog.data.dueDate = moment(this.datePicker.due).format('L');
+      this.editDialog.dueDate = moment(this.datePicker.due).format('L');
       this.datePicker.show = false;
     },
     setTime() {
@@ -262,7 +263,7 @@ export default {
       this.timePicker.show = false;
       const momentObj = moment(`1/1/11 ${this.timePicker.due}`);
       // reformat to ui's display format
-      this.editDialog.data.dueTime = momentObj.format('LT');
+      this.editDialog.dueTime = momentObj.format('LT');
     },
     getPriorityColor(priority) {
       return this.priorities[priority];
@@ -305,9 +306,10 @@ export default {
       this.openEditDialog(todo);
     },
     openEditDialog(item, index = null) {
-      this.editDialog.data = { ...item };
+      Object.assign(this.editDialog, item);
       this.editDialog.index = index;
       this.editDialog.show = true;
+      console.log(this.editDialog);
     },
     saveTodo(item) {
       const payloadKeys = [
