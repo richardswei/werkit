@@ -64,8 +64,13 @@
               <v-icon>mdi-square-edit-outline</v-icon>
             </v-btn>
             <br>
-            <v-btn small icon color="red">
-              <v-icon>mdi-close</v-icon>
+            <v-btn
+              small
+              icon
+              color="red"
+              @click.stop="deleteTodo(item, index)"
+            >
+             <v-icon>mdi-close</v-icon>
             </v-btn>
 
           </v-col>
